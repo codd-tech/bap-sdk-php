@@ -1,0 +1,37 @@
+{
+    "name": "codd-tech/bap-sdk-php",
+    "description": "Bot Advertising Platform SDK",
+    "keywords": ["telegram", "bot", "ads"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": ":author_name",
+            "email": "author@domain.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-sockets": "*",
+        "psr/log": "^1.0.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "CoddTech\\Bap\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoddTech\\Bap\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
