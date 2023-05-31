@@ -36,11 +36,6 @@ class BAP
             Log::error('Invalid input', $update);
             return;
         }
-      
-        if (!isset($updates[0]['update_id'])) {
-            Log::error('Invalid input', $updates);
-            return;
-        }
 
         $this->socket->send(array(
             'api_key' => $this->apiKey,
