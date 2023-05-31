@@ -22,7 +22,7 @@ class BAP
     public function __construct($apiKey, LoggerInterface $logger = null)
     {
         $this->apiKey = $apiKey;
-        $this->socket = new UdpSocket('api.production.bap.codd.io', 8081);
+        $this->socket = new UdpSocket('api.production.bap.codd.io', 8080);
         Log::initialize($logger);
     }
 
