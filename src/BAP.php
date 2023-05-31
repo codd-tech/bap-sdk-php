@@ -22,7 +22,7 @@ class BAP
     public function __construct($apiKey, LoggerInterface $logger = null)
     {
         $this->apiKey = $apiKey;
-        $this->socket = new UdpSocket('host.docker.internal', 8081);
+        $this->socket = new UdpSocket('api.production.bap.codd.io', 8081);
         Log::initialize($logger);
     }
 
@@ -34,6 +34,11 @@ class BAP
     {
         if (!isset($update['update_id'])) {
             Log::error('Invalid input', $update);
+            return;
+        }
+      
+        if (!isset($updates[0]['update_id'])) {
+            Log::error('Invalid input', $updates);
             return;
         }
 
