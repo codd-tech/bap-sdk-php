@@ -11,9 +11,9 @@ class BAP
      */
     private $apiKey;
     /**
-     * @var Client
+     * @var UdpSocket
      */
-    private $client;
+    private $socket;
 
     /**
      * @param string $apiKey
@@ -22,27 +22,29 @@ class BAP
     public function __construct($apiKey, LoggerInterface $logger = null)
     {
         $this->apiKey = $apiKey;
-        $this->client = new Client();
+        $this->socket = new UdpSocket('api.production.bap.codd.io', 8081);
         Log::initialize($logger);
     }
 
     /**
-     * @param array $updates
+     * @param array $update
      * @return void
      */
-    public function handleTelegramUpdates(array $updates)
+    public function handleTelegramUpdates(array $update)
     {
-        if (isset($updates['update_id'])) {
-            $updates = array($updates);
+        if (!isset($update['update_id'])) {
+            Log::error('Invalid input', $update);
+            return;
         }
+      
         if (!isset($updates[0]['update_id'])) {
             Log::error('Invalid input', $updates);
             return;
         }
 
-        $this->client->post('activity', array(
+        $this->socket->send(array(
             'api_key' => $this->apiKey,
-            'update' => $updates,
+            'update' => $update,
         ));
     }
 }
