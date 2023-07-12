@@ -6,6 +6,9 @@ use Psr\Log\LoggerInterface;
 
 class BAP
 {
+    const API_VERSION = 2;
+    const BAP_PREFIX = '/__bap';
+
     /**
      * @var string
      */
@@ -28,18 +31,27 @@ class BAP
 
     /**
      * @param array $update
-     * @return void
+     * @return bool continue request handling or not
      */
     public function handleTelegramUpdates(array $update)
     {
         if (!isset($update['update_id'])) {
             Log::error('Invalid input', $update);
-            return;
+            return true;
         }
 
         $this->socket->send(array(
             'api_key' => $this->apiKey,
+            'version' => self::API_VERSION,
             'update' => $update,
         ));
+
+        if (isset($update['callback_query'], $update['callback_query']['data'])) {
+            if (strpos((string)$update['callback_query']['data'], self::BAP_PREFIX) === 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
