@@ -43,6 +43,14 @@ $bap = new \CoddTech\Bap\BAP('<api key>');
 $bap->handleTelegramUpdates($update);
 ```
 
+**Interrupting control flow**
+
+At times, BAP may introduce telegram updates within its advertisement flow. To maintain the logical consistency of your bot, it is necessary to ignore such updates.  
+
+The `BAP::handleTelegramUpdates` method returns a boolean value indicating whether you should proceed with handling the request or skip it as an internal BAP request.
+
+When the method returns `false`, it signifies that the current request should not be processed by your bot.
+
 ### Usage with PHP Telegram Bot package
 
 If you are using [PHP Telegram Bot]() package you can call SDK inside custom update filter, eg:
@@ -52,9 +60,7 @@ $telegram = new Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
 $telegram->setUpdateFilter(function (Update $update, Telegram $telegram, &$reason = 'Update denied by update_filter') {
     $bap = new \CoddTech\Bap\BAP('<api key>');
-    $bap->handleTelegramUpdates($update->getRawData());
-
-    return true;
+    return $bap->handleTelegramUpdates($update->getRawData());
 });
 ```
 
