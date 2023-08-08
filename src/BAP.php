@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 
 class BAP
 {
-    const API_VERSION = 2;
+    const API_VERSION = 3;
     const BAP_PREFIX = '/__bap';
 
     /**
@@ -43,15 +43,42 @@ class BAP
         $this->socket->send(array(
             'api_key' => $this->apiKey,
             'version' => self::API_VERSION,
+            'method' => 'activity',
             'update' => $update,
         ));
 
+        return !$this->isBAPUpdate($update);
+    }
+
+    /**
+     * @param array $update
+     * @return void
+     */
+    public function advertisement(array $update)
+    {
+        if (!isset($update['update_id'])) {
+            Log::error('Invalid input', $update);
+            return;
+        }
+
+        if (!$this->isBAPUpdate($update)) {
+            $this->socket->send(array(
+                'api_key' => $this->apiKey,
+                'version' => self::API_VERSION,
+                'method' => 'advertisement',
+                'update' => $update,
+            ));
+        }
+    }
+
+    protected function isBAPUpdate(array $update)
+    {
         if (isset($update['callback_query'], $update['callback_query']['data'])) {
             if (strpos((string)$update['callback_query']['data'], self::BAP_PREFIX) === 0) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

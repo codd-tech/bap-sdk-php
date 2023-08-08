@@ -43,6 +43,11 @@ $bap = new \CoddTech\Bap\BAP('<api key>');
 $bap->handleTelegramUpdates($update);
 ```
 
+If your advertisement mode is set to **manual** you can mark ad placement in your code by calling:
+```php
+$bap->advertisement($update);
+```
+
 **Interrupting control flow**
 
 At times, BAP may introduce telegram updates within its advertisement flow. To maintain the logical consistency of your bot, it is necessary to ignore such updates.  
@@ -58,10 +63,16 @@ If you are using [PHP Telegram Bot]() package you can call SDK inside custom upd
 ```php
 $telegram = new Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
-$telegram->setUpdateFilter(function (Update $update, Telegram $telegram, &$reason = 'Update denied by update_filter') {
-    $bap = new \CoddTech\Bap\BAP('<api key>');
+$bap = new \CoddTech\Bap\BAP('<api key>');
+$telegram->setUpdateFilter(function (Update $update, Telegram $telegram, &$reason = 'Update denied by update_filter') use ($bap) {
     return $bap->handleTelegramUpdates($update->getRawData());
 });
+```
+
+For manual advertisement mode(Should be turned on in settings) call following in the desired ad placements.
+
+```php
+$bap->advertisement($update);
 ```
 
 ### API Key
