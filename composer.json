@@ -15,7 +15,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "ext-sockets": "*",
-        "psr/log": "^1.0.0"
+        "psr/log": ">=1.0.0"
     },
     "require-dev": {
     },
